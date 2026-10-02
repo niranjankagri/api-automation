@@ -29,6 +29,8 @@ api-automation
     │   ├── builder
     │   │   ├── RequestBuilder      Builds and sends HTTP requests
     │   │   └── ResponseBuilder     Maps JSON responses onto Java objects
+    │   ├── listeners
+    │   │   └── HtmlReportListener  Generates the custom HTML test report
     │   ├── constants
     │   │   ├── StatusCode          Expected HTTP status codes
     │   │   └── URL                 Base URL and endpoint paths
@@ -89,12 +91,28 @@ mvn clean test
 
 Maven runs the suite in `testng.xml`. Results are written to:
 
-- `target/surefire-reports/`: TestNG/Surefire reports
+- `target/surefire-reports/api-test-report.html`: the custom HTML report (see below)
+- `target/surefire-reports/`: standard TestNG/Surefire reports
 - `applog.txt`: the full request and assertion log
 
 The tests must be run from the project root, because `PropertiesReader` resolves `src/resources/data.properties` relative to the working directory.
 
 To run from an IDE, right-click `testng.xml` or `CommentTest` and choose **Run**.
+
+## HTML report
+
+`HtmlReportListener` (registered in `testng.xml`) writes a single self-contained HTML file, `api-test-report.html`, after each run. Open it in any browser; it needs no other files, so it can be shared or archived on its own.
+
+It shows:
+
+- an overall status badge, a pass-rate ring and the passed/failed/skipped/total counts
+- run start time, duration, Java version and OS
+- one expandable row per test with its status, duration, class and description
+- every step logged with `Util.logInfoMessage(...)` during the test (requests sent, status codes, checks)
+- the error message and full stack trace for failed tests (failed tests open automatically)
+- filter buttons to show only passed, failed or skipped tests
+
+The report follows the system light/dark theme. It is written to TestNG's output directory: `target/surefire-reports/` with Maven, or `test-output/` when run from the IDE.
 
 ## Configuration
 

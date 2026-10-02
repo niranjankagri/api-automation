@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.Reporter;
 
 /**
  * Common helpers: regex matching and logging.
@@ -32,12 +33,14 @@ public class Util {
 	}
 
 	/**
-	 * Logs a message at INFO level.
+	 * Logs a message at INFO level, and records it as a step of the running
+	 * test so it appears in the HTML report.
 	 *
 	 * @param  message  the message to log.
 	 */
 	public static void logInfoMessage(String message) {
 		logger.info(message);
+		Reporter.log(message);
 	}
 
 }
