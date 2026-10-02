@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.testng.Assert;
 
-import com.automation.api.builder.RequestBuilder;
-import com.automation.api.builder.ResponseBuilder;
-import com.automation.api.constants.StatusCode;
 import com.automation.api.constants.URL;
 import com.automation.api.response.User;
 import com.automation.api.utils.Util;
@@ -26,10 +23,7 @@ public class UserManager extends Manager {
 	 * @return Response             the response of the API.
 	 */
 	public Response searchUserByUsernameAPI(String username, int expectedStatusCode) {
-		Response response = RequestBuilder.getRequestBuilder().get(URL.USERS_BY_USERNAME + username);
-		Util.logInfoMessage("Actual Status Code : " + response.getStatusCode() + ", Expected Status Code :  : " + expectedStatusCode);
-		Assert.assertEquals(response.getStatusCode(), expectedStatusCode, "Response code should be 200");
-		return response;
+		return get(URL.USERS_BY_USERNAME + username, expectedStatusCode);
 	}
 
 	/**
@@ -39,14 +33,11 @@ public class UserManager extends Manager {
 	 * @param username           the username to search for.
 	 * @return List&lt;User&gt;  the matching users (always one element).
 	 */
-	@SuppressWarnings("unchecked")
 	public List<User> getUserByUsername(String username) {
-		Response response = searchUserByUsernameAPI(username, StatusCode.OK);
-		List<User> usersList = (List<User>) ResponseBuilder.getResponseAsObjectList(response, User.class);
-		Util.logInfoMessage("Username should not be duplicate : " + usersList.size());
-		Assert.assertEquals(usersList.size(), 1);
-
-		return usersList;
+		List<User> users = getList(URL.USERS_BY_USERNAME + username, User.class);
+		Util.logInfoMessage("Users found with username " + username + " : " + users.size());
+		Assert.assertEquals(users.size(), 1, "Expected exactly one user with username " + username);
+		return users;
 	}
 
 	/**

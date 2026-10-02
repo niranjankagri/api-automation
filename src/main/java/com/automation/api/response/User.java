@@ -94,6 +94,7 @@ public class User {
 		private String suite;
 		private String city;
 		private String zipcode;
+		private Geo geo;
 
 		public String getStreet() {
 			return street;
@@ -125,6 +126,14 @@ public class User {
 
 		public void setZipcode(String zipcode) {
 			this.zipcode = zipcode;
+		}
+
+		public Geo getGeo() {
+			return geo;
+		}
+
+		public void setGeo(Geo geo) {
+			this.geo = geo;
 		}
 
 		/**

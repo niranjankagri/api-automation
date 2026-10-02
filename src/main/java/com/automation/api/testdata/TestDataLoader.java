@@ -1,38 +1,59 @@
 package com.automation.api.testdata;
 
+import java.util.Properties;
+
 import com.automation.api.utils.PropertiesReader;
 
 /**
- * Loads test data from {@code src/resources/data.properties} into typed fields.
+ * Test data, loaded once from {@value #DATA_FILE} on the classpath.
  * <p>
- * To add new test data, add a key to the properties file, a field with
- * getter/setter here, and set it in {@link #applyProperties()}.
+ * Any value can be overridden with a JVM system property of the same name,
+ * e.g. {@code mvn test -Dusername=Bret}.
+ * <p>
+ * To add new test data, add a key to the properties file and a getter here.
  */
-public class TestDataLoader extends PropertiesReader {
+public final class TestDataLoader {
 
-	// Username of the user whose posts and comments are tested
-	private String username;
+	// Properties file with the test data, under src/test/resources
+	public static final String DATA_FILE = "data.properties";
 
-	/**
-	 * Reads the properties file (in the parent constructor) and fills the fields.
-	 */
-	public TestDataLoader() {
-		applyProperties();
+	private static final TestDataLoader INSTANCE = new TestDataLoader();
+
+	private final Properties properties;
+
+	private TestDataLoader() {
+		properties = PropertiesReader.load(DATA_FILE);
 	}
 
+	/**
+	 * Returns the shared test data.
+	 *
+	 * @return TestDataLoader  the shared instance.
+	 */
+	public static TestDataLoader getInstance() {
+		return INSTANCE;
+	}
+
+	/**
+	 * Username of the user whose posts and comments are tested.
+	 *
+	 * @return String  the username.
+	 */
 	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+		return get("username");
 	}
 
 	/**
-	 * Copies values from the loaded properties into the fields of this class.
+	 * Returns a value, preferring a system property over the properties file.
+	 *
+	 * @throws IllegalStateException if the key is set in neither place.
 	 */
-	public void applyProperties() {
-		setUsername(getProp().getProperty("username"));
+	private String get(String key) {
+		String value = System.getProperty(key, properties.getProperty(key));
+		if (value == null || value.isBlank()) {
+			throw new IllegalStateException("Missing test data '" + key + "' in " + DATA_FILE);
+		}
+		return value.trim();
 	}
 
 }

@@ -1,46 +1,48 @@
 package com.automation.api.manager;
 
-import com.automation.api.testdata.TestDataLoader;
+import java.util.List;
+
+import org.testng.Assert;
+
+import com.automation.api.builder.RequestBuilder;
+import com.automation.api.builder.ResponseBuilder;
+import com.automation.api.constants.StatusCode;
+import com.automation.api.utils.Util;
+
+import io.restassured.response.Response;
 
 /**
- * Entry point to the managers, one per API resource (users, posts, comments).
+ * Base class of the managers, one per API resource (users, posts, comments).
  * <p>
- * Tests extend this class (through {@code BaseTest}) and use the static
- * getters to reach each manager. Because it extends {@link TestDataLoader},
- * test data such as the username is also available to tests.
+ * Holds the steps every manager shares: send the request, log and assert
+ * the status code, and map the JSON body onto POJOs.
  */
-public class Manager extends TestDataLoader {
-
-	// Shared instance of each manager
-	private static UserManager userManager = new UserManager();
-	private static CommentManager commentManager = new CommentManager();
-	private static PostManager postManager = new PostManager();
+public abstract class Manager {
 
 	/**
-	 * Returns the manager for the {@code /users} endpoint.
+	 * Sends a GET request and asserts the status code.
 	 *
-	 * @return userManager  the shared UserManager instance.
+	 * @param uri                  the endpoint path including any query string.
+	 * @param expectedStatusCode   the status code the API should return.
+	 * @return Response            the response of the API.
 	 */
-	public static UserManager getUserManager() {
-		return userManager;
+	protected Response get(String uri, int expectedStatusCode) {
+		Response response = RequestBuilder.get(uri);
+		Util.logInfoMessage("Status code : actual " + response.getStatusCode() + ", expected " + expectedStatusCode);
+		Assert.assertEquals(response.getStatusCode(), expectedStatusCode, "Unexpected status code for GET " + uri);
+		return response;
 	}
 
 	/**
-	 * Returns the manager for the {@code /comments} endpoint.
+	 * Sends a GET request, asserts status 200 and maps the JSON array in the
+	 * body onto a list of objects.
 	 *
-	 * @return commentManager  the shared CommentManager instance.
+	 * @param uri             the endpoint path including any query string.
+	 * @param responseClass   the class to map each array element onto.
+	 * @return List&lt;T&gt;  one object per element of the array.
 	 */
-	public static CommentManager getCommentManager() {
-		return commentManager;
-	}
-
-	/**
-	 * Returns the manager for the {@code /posts} endpoint.
-	 *
-	 * @return postManager  the shared PostManager instance.
-	 */
-	public static PostManager getPostManager() {
-		return postManager;
+	protected <T> List<T> getList(String uri, Class<T> responseClass) {
+		return ResponseBuilder.getResponseAsObjectList(get(uri, StatusCode.OK), responseClass);
 	}
 
 }

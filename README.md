@@ -13,7 +13,6 @@ It tests the public [JSONPlaceholder](https://jsonplaceholder.typicode.com) API.
 | TestNG | Test runner, assertions and soft assertions |
 | REST Assured | Sending HTTP requests |
 | Jackson | Mapping JSON responses onto Java objects |
-| org.json | Parsing JSON arrays |
 | Log4j2 | Logging to the console and `applog.txt` |
 | CircleCI | Continuous integration |
 
@@ -28,15 +27,15 @@ api-automation
 └── src
     ├── main/java/com/automation/api
     │   ├── builder
-    │   │   ├── RequestBuilder      Builds and sends HTTP requests
+    │   │   ├── RequestBuilder      Sends HTTP requests
     │   │   └── ResponseBuilder     Maps JSON responses onto Java objects
-    │   ├── listeners
-    │   │   └── HtmlReportListener  Generates the custom HTML test report
     │   ├── constants
     │   │   ├── StatusCode          Expected HTTP status codes
     │   │   └── URL                 Base URL and endpoint paths
+    │   ├── listeners
+    │   │   └── HtmlReportListener  Generates the custom HTML test report
     │   ├── manager                 One class per API resource
-    │   │   ├── Manager             Gives tests access to all managers
+    │   │   ├── Manager             Base class: send request, assert status, map JSON
     │   │   ├── UserManager         /users
     │   │   ├── PostManager         /posts
     │   │   └── CommentManager      /comments
@@ -45,18 +44,17 @@ api-automation
     │   │   ├── Post
     │   │   └── Comment
     │   ├── testdata
-    │   │   └── TestDataLoader      Loads data.properties into typed fields
+    │   │   └── TestDataLoader      Test data from data.properties (overridable with -D)
     │   └── utils
-    │       ├── JsonHelper          JSON parsing helpers
-    │       ├── PropertiesReader    Reads data.properties
-    │       └── Util                Regex matching and logging
+    │       ├── PropertiesReader    Loads .properties files from the classpath
+    │       └── Util                Email validation and logging
     ├── main/resources
     │   └── log4j2.properties       Logging configuration
-    ├── resources
-    │   └── data.properties         Test data (e.g. username)
-    └── test/java/com/automation/api/tests
-        ├── BaseTest                Parent class of all tests
-        └── CommentTest             Email format test on comments
+    ├── test/java/com/automation/api/tests
+    │   ├── BaseTest                Parent class of all tests
+    │   └── CommentTest             Email format test on comments
+    └── test/resources
+        └── data.properties         Test data (e.g. username)
 ```
 
 ## How it works
@@ -64,10 +62,10 @@ api-automation
 The framework has three layers:
 
 1. **Tests** (`tests`) describe the scenario in business terms and contain no HTTP code.
-2. **Managers** (`manager`) wrap one API resource each. They send the request, check the status code, and return Java objects.
+2. **Managers** (`manager`) wrap one API resource each and return Java objects. The shared steps (send the request, log and assert the status code, map the JSON) live in the `Manager` base class.
 3. **Builders** (`builder`) do the low-level work: `RequestBuilder` sends requests with REST Assured, and `ResponseBuilder` turns JSON into POJOs with Jackson.
 
-Test classes extend `BaseTest`, so they can reach the managers (`getUserManager()`, `getPostManager()`, `getCommentManager()`) and the test data (`getUsername()`) directly.
+Test classes extend `BaseTest`, which provides the managers (`userManager`, `postManager`, `commentManager`) and the test data (`testData.getUsername()`).
 
 ### Test scenario: `CommentTest.validateEmailFormatOnComments`
 
@@ -96,7 +94,11 @@ Maven runs the suite in `testng.xml`. Results are written to:
 - `target/surefire-reports/`: standard TestNG/Surefire reports
 - `applog.txt`: the full request and assertion log
 
-The tests must be run from the project root, because `PropertiesReader` resolves `src/resources/data.properties` relative to the working directory.
+Any test data value can be overridden on the command line without editing `data.properties`:
+
+```bash
+mvn clean test -Dusername=Bret
+```
 
 To run from an IDE, right-click `testng.xml` or `CommentTest` and choose **Run**.
 
@@ -125,7 +127,7 @@ By default the report follows the system theme; the toggle remembers the viewer'
 
 | What | Where |
 |------|-------|
-| Username under test | `src/resources/data.properties` → `username` |
+| Username under test | `src/test/resources/data.properties` → `username`, or `-Dusername=...` |
 | Base URL and endpoints | `src/main/java/com/automation/api/constants/URL.java` |
 | Email format rule | `Util.EMAIL_REGEX` |
 | Log format and output | `src/main/resources/log4j2.properties` |
@@ -134,12 +136,13 @@ By default the report follows the system theme; the toggle remembers the viewer'
 
 1. Add the endpoint to `URL`.
 2. If the response is a new resource, add a POJO under `response`.
-3. Add a manager under `manager` (extend `Manager`) with an `...API(...)` method that sends the request and checks the status code, plus a method that returns POJOs. Expose the manager through a static getter in `Manager`.
-4. Write a test class under `tests` that extends `BaseTest`.
-5. Add the test class to `testng.xml`.
+3. Add a manager under `manager` that extends `Manager`. Use `get(uri, expectedStatusCode)` for a raw response or `getList(uri, Pojo.class)` for a list of objects.
+4. Add a field for the new manager in `BaseTest`.
+5. Write a test class under `tests` that extends `BaseTest`.
+6. Add the test class to `testng.xml`.
 
 ## Continuous integration
 
-`.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. A sample run is shown below.
+`.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. Test results appear in the CircleCI **Tests** tab, and the HTML report and `applog.txt` are saved as build **Artifacts**. A sample run is shown below.
 
 ![CircleCI execution report](CircleCI_Execution_Report.PNG)

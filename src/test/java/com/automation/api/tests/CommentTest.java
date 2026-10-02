@@ -1,6 +1,7 @@
 package com.automation.api.tests;
 
 import java.util.List;
+
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -26,13 +27,13 @@ public class CommentTest extends BaseTest {
 		SoftAssert softAssert = new SoftAssert();
 
 		// Search for the user.
-		User user = getUserManager().getUser(getUsername());
+		User user = userManager.getUser(testData.getUsername());
 		// Use the details fetched to make a search for the posts written by the user.
-		List<Post> userPosts = getPostManager().getAllPostsOfUser(user.getId());
+		List<Post> userPosts = postManager.getAllPostsOfUser(user.getId());
 		// For each post, fetch the comments.
-		List<Comment> commentsOnPosts = getCommentManager().getAllCommentsOnPosts(userPosts);
+		List<Comment> commentsOnPosts = commentManager.getAllCommentsOnPosts(userPosts);
 		// Validate if the email in the comment section are in the proper format.
-		getCommentManager().validateEmailInAllComments(softAssert, commentsOnPosts);
+		commentManager.validateEmailInAllComments(softAssert, commentsOnPosts);
 		softAssert.assertAll();
 	}
 }

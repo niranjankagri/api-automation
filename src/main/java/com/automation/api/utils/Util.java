@@ -1,6 +1,5 @@
 package com.automation.api.utils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,28 +7,29 @@ import org.apache.logging.log4j.Logger;
 import org.testng.Reporter;
 
 /**
- * Common helpers: regex matching and logging.
+ * Common helpers: email validation and logging.
  * <p>
  * Log messages go to the console and to {@code applog.txt}, as configured in
  * {@code src/main/resources/log4j2.properties}.
  */
-public class Util {
+public final class Util {
 
 	// Pattern of a valid email address, e.g. "name@example.com"; matched case-insensitively
-	public static String EMAIL_REGEX = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-	final static Logger logger = LogManager.getLogger(Util.class);
+	public static final String EMAIL_REGEX = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+	private static final Logger logger = LogManager.getLogger(Util.class);
+
+	private Util() {
+	}
 
 	/**
-	 * Checks whether a string matches a regex, ignoring case.
+	 * Checks whether a string is a valid email address ({@link #EMAIL_REGEX}).
 	 *
-	 * @param  regex    the pattern to match against.
-	 * @param  str      the string to check.
-	 * @return boolean  true if the pattern is found in the string.
+	 * @param  email    the string to check; may be null.
+	 * @return boolean  true if the string is a valid email address.
 	 */
-	public static boolean isStringPresentWithoutCase(String regex, String str) {
-		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(str);
-		return matcher.find();
+	public static boolean isValidEmail(String email) {
+		return email != null && EMAIL_PATTERN.matcher(email).matches();
 	}
 
 	/**

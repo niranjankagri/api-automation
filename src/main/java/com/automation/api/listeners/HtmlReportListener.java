@@ -37,7 +37,7 @@ import com.automation.api.utils.Util;
  * and stack trace. Known step formats are rendered specially:
  * <ul>
  * <li>{@code GET https://...} as a request with an HTTP method badge,</li>
- * <li>{@code Actual Status Code : 200, Expected Status Code : 200} as a status chip,</li>
+ * <li>{@code Status code : actual 200, expected 200} as a status chip,</li>
  * <li>{@code <text> : true|false} as a passed / failed check.</li>
  * </ul>
  * Any other message is shown as a plain info step. All CSS and JavaScript
@@ -59,8 +59,10 @@ public class HtmlReportListener implements IReporter {
 
 	// Step formats that get special rendering (see class comment)
 	private static final Pattern REQUEST_STEP = Pattern.compile("^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) (\\S+)$");
-	private static final Pattern STATUS_STEP = Pattern.compile("^Actual Status Code : (\\d+), Expected Status Code[\\s:]*(\\d+)$");
+	private static final Pattern STATUS_STEP = Pattern.compile("^Status code : actual (\\d+), expected (\\d+)$");
 	private static final Pattern CHECK_STEP = Pattern.compile("^(.+?) : (true|false)$");
+	// Splits a URL into host, path and query
+	private static final Pattern URL_PARTS = Pattern.compile("^(https?://[^/]+)?([^?]*)(\\?.*)?$");
 
 	// Circumference of the pass-rate ring (SVG circle with radius 52)
 	private static final double RING_CIRCUMFERENCE = 2 * Math.PI * 52;
@@ -290,7 +292,7 @@ public class HtmlReportListener implements IReporter {
 	 * Splits a URL into host, path and query parts so they can be coloured separately.
 	 */
 	private String highlightUrl(String url) {
-		Matcher m = Pattern.compile("^(https?://[^/]+)?([^?]*)(\\?.*)?$").matcher(url);
+		Matcher m = URL_PARTS.matcher(url);
 		if (!m.matches()) {
 			return escape(url);
 		}

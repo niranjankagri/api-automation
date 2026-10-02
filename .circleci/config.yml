@@ -1,20 +1,11 @@
-# Java Maven CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
+# CircleCI pipeline: builds the project and runs the TestNG suite on every push.
+# Docs: https://circleci.com/docs/language-java-maven/
+version: 2.1
+
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: cimg/openjdk:17.0
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
 
     environment:
       # Customize the JVM maximum heap limit
@@ -37,5 +28,21 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      # run tests!
+      # Run the tests
       - run: mvn clean test
+
+      # Show results in the CircleCI "Tests" tab, even when tests fail
+      - store_test_results:
+          path: target/surefire-reports
+
+      # Keep the HTML report and log as downloadable build artifacts
+      - store_artifacts:
+          path: target/surefire-reports/api-test-report.html
+          destination: api-test-report.html
+      - store_artifacts:
+          path: applog.txt
+
+workflows:
+  build:
+    jobs:
+      - build

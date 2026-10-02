@@ -41,12 +41,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		<!-- Parsing JSON arrays from responses -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20260814</version>
-		</dependency>
 		<!-- Mapping JSON onto the response POJOs -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
