@@ -105,14 +105,18 @@ To run from an IDE, right-click `testng.xml` or `CommentTest` and choose **Run**
 
 It shows:
 
-- an overall status badge, a pass-rate ring and the passed/failed/skipped/total counts
-- run start time, duration, Java version and OS
-- one expandable row per test with its status, duration, class and description
-- every step logged with `Util.logInfoMessage(...)` during the test (requests sent, status codes, checks)
-- the error message and full stack trace for failed tests (failed tests open automatically)
-- filter buttons to show only passed, failed or skipped tests
+- a header with the suite name, start time, duration, number of API calls and checks, and an overall verdict
+- a pass-rate ring, passed/failed/skipped/total counts with a stacked result bar, and the Java version, OS and user
+- one expandable card per test with its status, a readable title, its description, and a duration bar scaled to the slowest test
+- every step logged with `Util.logInfoMessage(...)` during the test, formatted by type:
+  - `GET https://...` steps show an HTTP method badge and a highlighted URL
+  - status code steps show a green or red code chip
+  - `<text> : true|false` steps show as passed or failed checks
+  - any other message shows as a plain info line
+- the error type, message and a collapsible stack trace for failed tests (failed tests open automatically), and the reason for skipped tests
+- a search box, status filters, an expand/collapse-all button and a light/dark theme toggle
 
-The report follows the system light/dark theme. It is written to TestNG's output directory: `target/surefire-reports/` with Maven, or `test-output/` when run from the IDE.
+By default the report follows the system theme; the toggle remembers the viewer's choice. It also prints cleanly. It is written to TestNG's output directory: `target/surefire-reports/` with Maven, or `test-output/` when run from the IDE.
 
 ## Configuration
 

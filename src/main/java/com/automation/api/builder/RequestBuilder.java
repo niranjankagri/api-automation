@@ -39,7 +39,7 @@ public class RequestBuilder {
 	 * @return response  the response of the HTTP request.
 	 */
 	public Response get(String uri) {
-		Util.logInfoMessage("Base url : " + URL.BASE_URL + ", URI : " + uri);
+		Util.logInfoMessage("GET " + URL.BASE_URL + uri);
 		return apiConnection.get(uri);
 	}
 
