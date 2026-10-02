@@ -1,9 +1,19 @@
 package com.automation.api.response;
 
+/**
+ * A user returned by the {@code /users} endpoint.
+ * <p>
+ * Plain getter/setter POJO that Jackson fills from the JSON response.
+ * The nested {@link Address} and {@link Company} classes map the nested
+ * JSON objects of the same name.
+ */
 public class User {
 
+	// Unique id of the user; used to look up the user's posts
 	private int id;
+	// Full name of the user
 	private String name;
+	// Unique login name; used to search for the user
 	private String username;
 	private String email;
 	private Address address;
@@ -75,6 +85,9 @@ public class User {
 		this.company = company;
 	}
 
+	/**
+	 * Postal address of a user.
+	 */
 	public static class Address {
 
 		private String street;
@@ -114,6 +127,9 @@ public class User {
 			this.zipcode = zipcode;
 		}
 
+		/**
+		 * Latitude/longitude of an address.
+		 */
 		public static class Geo {
 
 			private double lat;
@@ -139,6 +155,9 @@ public class User {
 
 	}
 
+	/**
+	 * Company a user works for.
+	 */
 	public static class Company {
 
 		private String name;

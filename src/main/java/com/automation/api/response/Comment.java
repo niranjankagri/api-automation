@@ -1,11 +1,21 @@
 package com.automation.api.response;
 
+/**
+ * A comment returned by the {@code /comments} endpoint.
+ * <p>
+ * Plain getter/setter POJO that Jackson fills from the JSON response.
+ */
 public class Comment {
 
+	// Unique id of the comment
 	private int id;
+	// Id of the post this comment belongs to
 	private int postId;
+	// Title of the comment
 	private String name;
+	// Email of the commenter; the tests check its format
 	private String email;
+	// Text of the comment
 	private String body;
 
 	public int getId() {

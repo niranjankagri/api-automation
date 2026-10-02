@@ -11,30 +11,36 @@ import com.automation.api.utils.Util;
 
 import io.restassured.response.Response;
 
+/**
+ * Operations on the {@code /posts} endpoint: fetching the posts written by a user.
+ */
 public class PostManager extends Manager {
-	
+
 	/**
-     * Call API for get posts by userid
-     * @param  userId        the user ID of user. 
-     * @return Response      the response of API.
-     */
+	 * Calls the API to get the posts of a user and checks the status code.
+	 *
+	 * @param  userId               the id of the user.
+	 * @param  expectedStatusCode   the status code the API should return.
+	 * @return Response             the response of the API.
+	 */
 	public Response getAllPostsOfUserAPI(int userId, int expectedStatusCode) {
 		Response response = RequestBuilder.getRequestBuilder().get(URL.POSTS_BY_USERID + userId);
 		Util.logInfoMessage("Actual Status Code : " + response.getStatusCode() + ", Expected Status Code :  : " + expectedStatusCode);
 		Assert.assertEquals(response.getStatusCode(), expectedStatusCode, "Response code should be 200");
 		return response;
 	}
-	
+
 	/**
-     * Get the list of all post done by user 
-     * @param userId        the user ID of user
-     * @return List<Post>   the list of Post class object
-     */
+	 * Gets all posts written by a user.
+	 *
+	 * @param userId             the id of the user.
+	 * @return List&lt;Post&gt;  the posts written by the user.
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Post> getAllPostsOfUser(int userId) {
 		Response response = getAllPostsOfUserAPI(userId, StatusCode.OK);
-		List<Post> userPostsList =  (List<Post>) ResponseBuilder.getResponseAsObjectList(response, Post.class);
+		List<Post> userPostsList = (List<Post>) ResponseBuilder.getResponseAsObjectList(response, Post.class);
 		return userPostsList;
 	}
-	
+
 }

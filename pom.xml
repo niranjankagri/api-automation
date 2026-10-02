@@ -8,6 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>api-automation</name>
+	<description>REST API test automation framework built with REST Assured and TestNG</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,16 +18,19 @@
 	</properties>
 
 	<dependencies>
+		<!-- Test framework: test runner, assertions and soft assertions -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.12.0</version>
 		</dependency>
+		<!-- HTTP client for sending API requests -->
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>6.0.1</version>
 		</dependency>
+		<!-- Logging (configured in src/main/resources/log4j2.properties) -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -37,11 +41,13 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		<!-- Parsing JSON arrays from responses -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20260814</version>
 		</dependency>
+		<!-- Mapping JSON onto the response POJOs -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -50,11 +56,13 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<!-- Compiles for Java 17 (see maven.compiler.release) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.16.0</version>
 			</plugin>
+			<!-- Runs the TestNG suite defined in testng.xml on `mvn test` -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

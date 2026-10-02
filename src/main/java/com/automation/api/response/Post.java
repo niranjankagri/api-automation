@@ -1,10 +1,19 @@
 package com.automation.api.response;
 
+/**
+ * A post returned by the {@code /posts} endpoint.
+ * <p>
+ * Plain getter/setter POJO that Jackson fills from the JSON response.
+ */
 public class Post {
 
+	// Unique id of the post
 	private int id;
+	// Id of the user who wrote the post
 	private int userId;
+	// Title of the post
 	private String title;
+	// Text of the post
 	private String body;
 
 	public int getId() {

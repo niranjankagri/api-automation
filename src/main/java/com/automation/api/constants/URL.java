@@ -1,13 +1,21 @@
 package com.automation.api.constants;
 
+/**
+ * Base URL and endpoint paths of the API under test
+ * (<a href="https://jsonplaceholder.typicode.com">JSONPlaceholder</a>).
+ * <p>
+ * Each endpoint ends with a query parameter, so callers append the value,
+ * e.g. {@code URL.POSTS_BY_USERID + 1}.
+ */
 public class URL {
 
+	// Root URL of the API; endpoints below are relative to it
 	public static String BASE_URL = "https://jsonplaceholder.typicode.com";
-	// End point for get all user
+	// Endpoint to search users by username
 	public static String USERS_BY_USERNAME = "/users?username=";
-	// End point for get all posts
+	// Endpoint to get all posts written by a user
 	public static String POSTS_BY_USERID = "/posts?userId=";
-	// End point for get all comments of respective post
+	// Endpoint to get all comments of a post
 	public static String COMMENTS_BY_POSTID = "/comments?postId=";
 
 }
