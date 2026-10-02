@@ -1,0 +1,7 @@
+test-output/
+target/
+.settings/
+.idea/
+*.iml
+applog.txt
+*.log
