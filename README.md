@@ -22,6 +22,7 @@ It tests the public [JSONPlaceholder](https://jsonplaceholder.typicode.com) API.
 ```
 api-automation
 ├── .circleci/config.yml            CircleCI pipeline: runs `mvn clean test`
+├── docs/images                     Screenshots used in this README
 ├── pom.xml                         Maven dependencies and plugins
 ├── testng.xml                      TestNG suite (list of test classes to run)
 └── src
@@ -118,6 +119,8 @@ It shows:
 
 By default the report follows the system theme; the toggle remembers the viewer's choice. It also prints cleanly. It is written to TestNG's output directory: `target/surefire-reports/` with Maven, or `test-output/` when run from the IDE.
 
+![HTML test report](docs/images/html-report.png)
+
 ## Configuration
 
 | What | Where |
@@ -137,4 +140,6 @@ By default the report follows the system theme; the toggle remembers the viewer'
 
 ## Continuous integration
 
-`.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. `CircleCI_Execution_Report.PNG` shows a sample run.
+`.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. A sample run is shown below.
+
+![CircleCI execution report](CircleCI_Execution_Report.PNG)
