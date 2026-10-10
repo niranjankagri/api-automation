@@ -1,5 +1,7 @@
 # api-automation
 
+[![Tests](https://github.com/niranjankagri/api-automation/actions/workflows/tests.yml/badge.svg)](https://github.com/niranjankagri/api-automation/actions/workflows/tests.yml)
+
 A REST API test automation framework built with **Java 17**, **REST Assured** and **TestNG**.
 
 It tests the public [JSONPlaceholder](https://jsonplaceholder.typicode.com) API. The included test finds a user by username, fetches every post that user wrote, fetches every comment on those posts, and checks that each comment's email address is correctly formatted.
@@ -14,12 +16,13 @@ It tests the public [JSONPlaceholder](https://jsonplaceholder.typicode.com) API.
 | REST Assured | Sending HTTP requests |
 | Jackson | Mapping JSON responses onto Java objects |
 | Log4j2 | Logging to the console and `applog.txt` |
-| CircleCI | Continuous integration |
+| GitHub Actions, CircleCI | Continuous integration |
 
 ## Project structure
 
 ```
 api-automation
+├── .github/workflows/tests.yml     GitHub Actions: runs `mvn clean test` on every push
 ├── .circleci/config.yml            CircleCI pipeline: runs `mvn clean test`
 ├── docs/images                     Screenshots used in this README
 ├── pom.xml                         Maven dependencies and plugins
@@ -142,6 +145,8 @@ By default the report follows the system theme; the toggle remembers the viewer'
 6. Add the test class to `testng.xml`.
 
 ## Continuous integration
+
+`.github/workflows/tests.yml` runs the suite on GitHub Actions on every push and pull request (JDK 17, Maven cache) and keeps the HTML report and `applog.txt` as the run's **test-report** artifact; the badge at the top shows the latest result.
 
 `.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. Test results appear in the CircleCI **Tests** tab, and the HTML report and `applog.txt` are saved as build **Artifacts**. A sample run is shown below.
 
