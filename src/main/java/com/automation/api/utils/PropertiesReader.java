@@ -12,6 +12,7 @@ import java.util.Properties;
  */
 public final class PropertiesReader {
 
+	/** Static helpers only: no instances. */
 	private PropertiesReader() {
 	}
 

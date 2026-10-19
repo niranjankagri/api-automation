@@ -317,10 +317,12 @@ public class HtmlReportListener implements IReporter {
 		return count + " " + word + (count == 1 ? "" : "s");
 	}
 
+	/** One label/value pair of the report header; the value is HTML-escaped. */
 	private String metaItem(String label, String value) {
 		return "<div><span>" + label + "</span><b>" + escape(value) + "</b></div>";
 	}
 
+	/** The symbol shown next to a test: a tick for pass, a cross for fail, a dash for skip. */
 	private String statusIcon(String status) {
 		switch (status) {
 		case "pass":

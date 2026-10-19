@@ -15,6 +15,7 @@ import io.restassured.response.Response;
  */
 public final class RequestBuilder {
 
+	/** Static helpers only: no instances. */
 	private RequestBuilder() {
 	}
 

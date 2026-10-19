@@ -21,6 +21,7 @@ public final class TestDataLoader {
 
 	private final Properties properties;
 
+	/** Static access only: no instances. */
 	private TestDataLoader() {
 		properties = PropertiesReader.load(DATA_FILE);
 	}

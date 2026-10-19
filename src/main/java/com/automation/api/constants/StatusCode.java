@@ -8,6 +8,7 @@ public final class StatusCode {
 	// Status code for success
 	public static final int OK = 200;
 
+	/** Constants only: no instances. */
 	private StatusCode() {
 	}
 

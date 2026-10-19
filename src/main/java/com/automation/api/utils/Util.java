@@ -19,6 +19,7 @@ public final class Util {
 	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
 	private static final Logger logger = LogManager.getLogger(Util.class);
 
+	/** Static helpers only: no instances. */
 	private Util() {
 	}
 

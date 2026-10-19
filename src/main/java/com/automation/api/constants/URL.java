@@ -18,6 +18,7 @@ public final class URL {
 	// Endpoint to get all comments of a post
 	public static final String COMMENTS_BY_POSTID = "/comments?postId=";
 
+	/** Constants only: no instances. */
 	private URL() {
 	}
 

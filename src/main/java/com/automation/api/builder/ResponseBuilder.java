@@ -22,6 +22,7 @@ public final class ResponseBuilder {
 	private static final ObjectMapper MAPPER = new ObjectMapper()
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+	/** Static helpers only: no instances. */
 	private ResponseBuilder() {
 	}
 
