@@ -146,8 +146,12 @@ By default the report follows the system theme; the toggle remembers the viewer'
 
 ## Continuous integration
 
-`.github/workflows/tests.yml` runs the suite on GitHub Actions on every push and pull request (JDK 17, Maven cache) and keeps the HTML report and `applog.txt` as the run's **test-report** artifact; the badge at the top shows the latest result.
+`.github/workflows/tests.yml` runs the suite on GitHub Actions on every push and pull request (JDK 17, Maven cache) and keeps the HTML report and `applog.txt` as the run's **test-report** artifact; the badge at the top shows the latest result. The JUnit XML is kept as the separate **junit-api** artifact, which [Automation Coverage & Quality Intelligence](https://github.com/niranjankagri/automation-coverage-quality-intelligence) collects. `main` is protected by a ruleset: every change goes through a pull request, and this CI job must pass before it is merged.
 
 `.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. Test results appear in the CircleCI **Tests** tab, and the HTML report and `applog.txt` are saved as build **Artifacts**. A sample run is shown below.
 
 ![CircleCI execution report](CircleCI_Execution_Report.PNG)
+
+## License
+
+[MIT](LICENSE)
