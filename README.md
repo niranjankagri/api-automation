@@ -146,7 +146,11 @@ By default the report follows the system theme; the toggle remembers the viewer'
 
 ## Continuous integration
 
-`.github/workflows/tests.yml` runs the suite on GitHub Actions on every push and pull request (JDK 17, Maven cache) and keeps the HTML report and `applog.txt` as the run's **test-report** artifact; the badge at the top shows the latest result. The JUnit XML is kept as the separate **junit-api** artifact, which [Automation Coverage & Quality Intelligence](https://github.com/niranjankagri/automation-coverage-quality-intelligence) collects. `main` is protected by a ruleset: every change goes through a pull request, and this CI job must pass before it is merged.
+`.github/workflows/tests.yml` runs the suite on GitHub Actions on every push and pull request (JDK 17, Maven cache) and keeps the HTML report and `applog.txt` as the run's **test-report** artifact; the badge at the top shows the latest result. The JUnit XML is kept as the separate **junit-api** artifact, which [Automation Coverage & Quality Intelligence](https://github.com/niranjankagri/automation-coverage-quality-intelligence) collects.
+
+CI also runs every Monday at 23:15 UTC without a code change, so a broken dependency or a change outside the repository shows up within a week. Dependabot proposes dependency and GitHub Actions updates once a month (minor and patch updates grouped, major versions as separate pull requests).
+
+`main` is protected by a ruleset: every change goes through a pull request, and this CI job must pass before it is merged.
 
 `.circleci/config.yml` runs the suite on every push using the `cimg/openjdk:17.0` image, caching Maven dependencies between builds. Test results appear in the CircleCI **Tests** tab, and the HTML report and `applog.txt` are saved as build **Artifacts**. A sample run is shown below.
 
