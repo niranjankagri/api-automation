@@ -22,8 +22,8 @@ public class CommentTest extends BaseTest {
 	 * each post, then check each comment's email. All bad emails are reported
 	 * together at the end.
 	 */
-	@Test(description = "Every comment on the configured user's posts has a valid email address")
-	public void validateEmailFormatOnComments() {
+	@Test(description = "[TC-201] Every comment on the configured user's posts has a valid email address")
+	public void tc201_validateEmailFormatOnComments() {
 		SoftAssert softAssert = new SoftAssert();
 
 		// Search for the user.
