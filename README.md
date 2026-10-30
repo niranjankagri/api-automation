@@ -70,7 +70,9 @@ The framework has three layers:
 
 Test classes extend `BaseTest`, which provides the managers (`userManager`, `postManager`, `commentManager`) and the test data (`testData.getUsername()`).
 
-### Test scenario: `CommentTest.validateEmailFormatOnComments`
+### Test scenario TC-201: `CommentTest.tc201_validateEmailFormatOnComments`
+
+Written out for a manual run (setup, steps, expected results) in [docs/manual-test-cases.md](docs/manual-test-cases.md). Test methods start with their case ID (`tc201_...`).
 
 1. Search for the user by the username in `data.properties` (`GET /users?username=Samantha`) and assert that exactly one user matches.
 2. Get all posts written by that user (`GET /posts?userId={id}`).
